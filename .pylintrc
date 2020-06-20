@@ -1,0 +1,7 @@
+[FORMAT]
+
+max-line-length=115
+
+[MESSAGES CONTROL]
+
+disable=duplicate-code
