@@ -25,7 +25,7 @@ setup(
     python_requires='>=3.7.0',
     install_requires=[
         'click==7.1.2',
-        'requests==2.24.0'
+        'requests==2.31.0'
     ],
     extras_require={
         'dev': [
