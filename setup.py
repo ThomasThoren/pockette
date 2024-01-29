@@ -1,11 +1,11 @@
 """Package file for `pockette`."""
 
-from setuptools import setup, find_packages  # type: ignore
+from setuptools import setup, find_packages
 
 from pockette import VERSION
 
 
-with open('README.md', 'r') as f:
+with open('README.md', 'r', encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
 
@@ -20,20 +20,22 @@ setup(
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     keywords=['Pocket', 'CLI'],
-    packages=find_packages(exclude=('tests')),
+    packages=find_packages(exclude=('tests',)),
     include_package_data=True,
     python_requires='>=3.7.0',
     install_requires=[
-        'click==7.1.2',
-        'requests==2.24.0'
+        'click~=8.1',
+        'requests~=2.24'
     ],
     extras_require={
         'dev': [
-            'coverage==5.1',
-            'mypy==0.780',
-            'pylint==2.5.3',
-            'pytest==5.4.3',
-            'pytest-cov==2.10.0'
+            'coverage~=7.4',
+            'mypy~=1.8',
+            'pylint~=3.0',
+            'pytest~=8.0',
+            'pytest-cov~=4.1',
+            'types-requests~=2.24',
+            'types-setuptools'
         ]
     },
     entry_points={

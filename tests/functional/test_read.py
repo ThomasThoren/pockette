@@ -5,7 +5,7 @@ import os
 from unittest.mock import patch, MagicMock
 
 from click.testing import CliRunner
-import pytest  # type: ignore
+import pytest
 
 from pockette import DATA_FILE, COUNT_DEFAULT
 from pockette.cli import read
@@ -26,7 +26,7 @@ def fake_pocket_response(scope="module") -> MagicMock:  # pylint: disable=unused
     fake_pocket_response_file = os.path.realpath(
         os.path.join(os.path.dirname(DATA_FILE), '..', 'tests', 'data', 'pocket.json')
     )
-    with open(fake_pocket_response_file, 'r') as f_in:
+    with open(fake_pocket_response_file, 'r', encoding='utf-8') as f_in:
         response.text = json.dumps(json.load(f_in))
 
     return response
@@ -34,7 +34,7 @@ def fake_pocket_response(scope="module") -> MagicMock:  # pylint: disable=unused
 
 @patch('pockette.pocket_handler.webbrowser.open')
 @patch('pockette.pocket_handler.requests.post')
-class TestRead:  # pylint: disable=no-self-use,redefined-outer-name,unused-argument
+class TestRead:  # pylint: disable=redefined-outer-name,unused-argument
     """Test reading Pocket data."""
 
     def test_read(self, mock_post: MagicMock, mock_webbrowser: MagicMock, mock_env_vars,

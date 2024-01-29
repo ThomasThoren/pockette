@@ -6,7 +6,7 @@ from pockette import VERSION
 from pockette.cli import cli, _help
 
 
-class TestPocket:  # pylint: disable=no-self-use
+class TestPocket:
     """Test general commands."""
 
     def test_group_name_only(self):

@@ -59,7 +59,9 @@ class PocketSetupHandler:  # pylint: disable=too-few-public-methods
         data = {"consumer_key": consumer_key, "redirect_uri": "https://google.com"}
 
         try:
-            response = requests.post('https://getpocket.com/v3/oauth/request', headers=headers, json=data)
+            response = requests.post(
+                'https://getpocket.com/v3/oauth/request', headers=headers, json=data, timeout=5
+            )
             response.raise_for_status()
         except requests.exceptions.HTTPError:
             click.echo(f'HTTP error: {response.text}')
@@ -79,7 +81,9 @@ class PocketSetupHandler:  # pylint: disable=too-few-public-methods
         data = {'consumer_key': consumer_key, 'code': request_token}
 
         try:
-            response = requests.post('https://getpocket.com/v3/oauth/authorize', headers=headers, json=data)
+            response = requests.post(
+                'https://getpocket.com/v3/oauth/authorize', headers=headers, json=data, timeout=5
+            )
             response.raise_for_status()
         except requests.exceptions.HTTPError:
             click.echo(f'HTTP error: {response.text}')

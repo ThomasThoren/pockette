@@ -5,7 +5,7 @@ import json
 import os
 import random
 import sys
-from typing import Dict, List
+from typing import Dict, List, Optional
 import webbrowser
 
 import click
@@ -61,7 +61,7 @@ class PocketDataHandler:
             'count': '100000',
         }
 
-        response = requests.post('https://getpocket.com/v3/get', headers=headers, json=data)
+        response = requests.post('https://getpocket.com/v3/get', headers=headers, json=data, timeout=5)
 
         try:
             pocket_data = json.loads(response.text)
@@ -71,10 +71,10 @@ class PocketDataHandler:
 
         return pocket_data
 
-    # pylint: disable=too-many-arguments
-    def generate_report(self, count: int = None, show_all: bool = False, length: str = None,
-                        include_keywords: str = None, exclude_keywords: str = None,
-                        end_date: datetime = None, start_date: datetime = None):
+    # pylint: disable=too-many-arguments,consider-using-f-string
+    def generate_report(self, count: Optional[int] = None, show_all: bool = False, length: Optional[str] = None,
+                        include_keywords: Optional[str] = None, exclude_keywords: Optional[str] = None,
+                        end_date: Optional[datetime] = None, start_date: Optional[datetime] = None):
         """Generate report for Pocket data."""
         if show_all:
             count = None
@@ -123,8 +123,9 @@ class PocketDataHandler:
         return datetime.now()
 
     # pylint: disable=too-many-branches,too-many-statements,too-many-arguments,too-many-locals
-    def _filter_links(self, include_keywords: str = None, exclude_keywords: str = None,
-                      end_date: datetime = None, start_date: datetime = None, length: str = None) -> List[dict]:
+    def _filter_links(self, include_keywords: Optional[str] = None, exclude_keywords: Optional[str] = None,
+                      end_date: Optional[datetime] = None, start_date: Optional[datetime] = None,
+                      length: Optional[str] = None) -> List[dict]:
         """Filter and analyze Pocket links."""
         filtered_links = []
 
@@ -203,9 +204,9 @@ class PocketDataHandler:
     # pylint: disable=too-many-locals,too-many-arguments
     def search_pocket_data(self, count: int = COUNT_DEFAULT, offset: int = 0, is_random: bool = False,
                            sort_order: str = 'time', reverse_order: bool = False,
-                           show_all: bool = False, open_sites: bool = False, length: str = None,
-                           include_keywords: str = None, exclude_keywords: str = None,
-                           end_date: datetime = None, start_date: datetime = None):
+                           show_all: bool = False, open_sites: bool = False, length: Optional[str] = None,
+                           include_keywords: Optional[str] = None, exclude_keywords: Optional[str] = None,
+                           end_date: Optional[datetime] = None, start_date: Optional[datetime] = None):
         """Search through Pocket bookmarks."""
         links = self._filter_links(
             include_keywords=include_keywords,
@@ -281,7 +282,7 @@ class PocketDataHandler:
         )
 
     @staticmethod
-    def _print_domain_stats(domain_counts: Dict[str, int], max_count: int = None):
+    def _print_domain_stats(domain_counts: Dict[str, int], max_count: Optional[int] = None):
         """Print domains and their stats."""
         urls = tuple(reversed(sorted(domain_counts.items(), key=lambda x: x[1])))
 

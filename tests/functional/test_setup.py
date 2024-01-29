@@ -4,10 +4,10 @@ import json
 from unittest.mock import patch, MagicMock
 
 from click.testing import CliRunner
-import pytest  # type: ignore
+import pytest
 from requests import Response
 
-from pockette.cli import setup
+from pockette.cli import setup as _setup  # "setup" clashes with pytest's setup method
 
 
 @pytest.fixture
@@ -26,7 +26,7 @@ def fake_oath_authorize_response(scope="module") -> MagicMock:  # pylint: disabl
     return response
 
 
-class TestSetup:  # pylint: disable=no-self-use,redefined-outer-name
+class TestSetup:  # pylint: disable=redefined-outer-name
     """Test setting up Pocket CLI."""
 
     @patch('pockette.pocket_handler.requests.post')
@@ -42,7 +42,7 @@ class TestSetup:  # pylint: disable=no-self-use,redefined-outer-name
         ]
 
         runner = CliRunner()
-        result = runner.invoke(setup, input='CONSUMER_KEY\nAnyKey\n')
+        result = runner.invoke(_setup, input='CONSUMER_KEY\nAnyKey\n')
 
         assert result.exit_code == 0
         assert 'export POCKET_CONSUMER_KEY=CONSUMER_KEY' in result.output
@@ -54,7 +54,7 @@ class TestSetup:  # pylint: disable=no-self-use,redefined-outer-name
         monkeypatch.setenv("POCKET_ACCESS_TOKEN", "access_token")
 
         runner = CliRunner()
-        result = runner.invoke(setup, input='n\n')
+        result = runner.invoke(_setup, input='n\n')
 
         assert result.exit_code == 0
         assert 'Pocket environment variables already configured' in result.output
@@ -72,7 +72,7 @@ class TestSetup:  # pylint: disable=no-self-use,redefined-outer-name
         ]
 
         runner = CliRunner()
-        result = runner.invoke(setup, input='y\nCONSUMER_KEY\nAnyKey\n')
+        result = runner.invoke(_setup, input='y\nCONSUMER_KEY\nAnyKey\n')
 
         assert result.exit_code == 0
         assert 'export POCKET_CONSUMER_KEY=CONSUMER_KEY' in result.output
@@ -92,7 +92,7 @@ class TestSetup:  # pylint: disable=no-self-use,redefined-outer-name
         ]
 
         runner = CliRunner()
-        result = runner.invoke(setup, input='CONSUMER_KEY\n')
+        result = runner.invoke(_setup, input='CONSUMER_KEY\n')
         assert result.exit_code == 1
 
     @patch('pockette.pocket_handler.requests.post')
@@ -111,5 +111,5 @@ class TestSetup:  # pylint: disable=no-self-use,redefined-outer-name
         ]
 
         runner = CliRunner()
-        result = runner.invoke(setup, input='CONSUMER_KEY\nAnyKey\n')
+        result = runner.invoke(_setup, input='CONSUMER_KEY\nAnyKey\n')
         assert result.exit_code == 1
